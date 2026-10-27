@@ -1,6 +1,6 @@
 # OG Video Studio
 
-A small browser tool for making the `og:video` for my portfolio: a twinkling 3D particle globe with my name over it, tweakable live and exported as an MP4.
+A small browser tool for making the `og:video` for my portfolio: a twinkling 3D particle globe with a line of text over it, tweakable live and exported as an MP4.
 
 [![The exported OG video: a slowly turning particle globe behind "Deep Patel"](assets/deep-patel-og.gif)](assets/deep-patel-og.mp4)
 
@@ -21,14 +21,14 @@ Open http://localhost:5173. Use Chrome or Edge for MP4 export.
 - **Replay** restarts the entry spin so you can see how the video will begin.
 - **Download** renders the video and saves it as `<text>-og.mp4`.
 - Drag the globe to spin it in the preview. Dragging is never recorded.
-- Settings are remembered in your browser. **Reset** puts everything back to the defaults.
+- Settings are remembered in your browser. **Copy values** copies every current setting as JSON, and **Reset** puts everything back to the defaults.
 
 ### Settings
 
 | Section | What it controls |
 | --- | --- |
 | Colors | Background, text and particle colors |
-| Text | Show/hide, content, size (240px), letter spacing (−9%), weight (550), X/Y offset |
+| Text | Show/hide, content, size, letter spacing, weight, max width, line height, X/Y offset |
 | Particles | Surface or volume distribution, count, sphere radius, particle size, depth sizing (min/max), seed |
 | Motion | Loop, rotation speed, float intensity, twinkle and twinkle speed |
 | Entry Spin | A fast opening spin that eases out (hidden while Loop is on) |
@@ -41,7 +41,7 @@ Open http://localhost:5173. Use Chrome or Edge for MP4 export.
 Everything is drawn into a single canvas, which is both the preview and the video source, so the preview matches the export exactly.
 
 1. The globe is drawn with WebGL on a hidden canvas. The shaders are ported from a Framer `ParticleSphere` component. Floating and twinkling are calculated on the GPU, and only the rotation is updated per frame in JavaScript.
-2. That image is copied onto the visible canvas, and the name is drawn on top with the Canvas 2D API in Work Sans. The text is centered on its visible letters rather than its text box, with a correction for the extra spacing canvas adds after the last letter.
+2. That image is copied onto the visible canvas, and the name is drawn on top with the Canvas 2D API in Work Sans. The text is centered on its visible letters rather than its text box, with a correction for the extra spacing canvas adds after the last letter. Text wraps within the max width and is balanced like CSS `text-wrap: balance`: it keeps the fewest lines that fit but makes them as even as possible, and centres each line.
 
 Particle positions come from a seeded random generator, so the same **Seed** always gives the same globe.
 

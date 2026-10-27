@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { sections, type Settings } from "../settings"
 import { ControlRow } from "./controls"
 
@@ -15,6 +15,19 @@ interface Props {
 
 export function SettingsPanel({ open, settings, onChange, onReset, footer }: Props) {
     const [collapsed, setCollapsed] = useState<Record<string, boolean>>({})
+    const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle")
+    const resetTimer = useRef<number>()
+
+    const copy = async () => {
+        try {
+            await navigator.clipboard.writeText(JSON.stringify(settings, null, 2))
+            setCopyState("copied")
+        } catch {
+            setCopyState("failed")
+        }
+        window.clearTimeout(resetTimer.current)
+        resetTimer.current = window.setTimeout(() => setCopyState("idle"), 1500)
+    }
 
     return (
         <AnimatePresence>
@@ -28,9 +41,20 @@ export function SettingsPanel({ open, settings, onChange, onReset, footer }: Pro
                 >
                     <header className="panel-header">
                         <span>Settings</span>
-                        <button type="button" className="link-button" onClick={onReset}>
-                            Reset
-                        </button>
+                        <div className="header-actions">
+                            <button
+                                type="button"
+                                className="link-button"
+                                onClick={copy}
+                                title="Copy all current values as JSON"
+                                aria-live="polite"
+                            >
+                                {copyState === "copied" ? "Copied" : copyState === "failed" ? "Copy failed" : "Copy values"}
+                            </button>
+                            <button type="button" className="link-button" onClick={onReset}>
+                                Reset
+                            </button>
+                        </div>
                     </header>
 
                     <div className="panel-body">

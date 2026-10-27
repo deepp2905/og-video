@@ -217,6 +217,11 @@ button {
     font-weight: 600;
 }
 
+.header-actions {
+    display: flex;
+    gap: 4px;
+}
+
 .link-button {
     border: 0;
     background: none;

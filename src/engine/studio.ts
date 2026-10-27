@@ -493,14 +493,54 @@ export class Studio {
         ctx.letterSpacing = `${spacing}px`
         ctx.textAlign = "center"
         ctx.textBaseline = "alphabetic"
-        // Center the visible ink, not the em box: canvas adds letter spacing after the last glyph too
-        const m = ctx.measureText(s.text)
+
+        // Canvas adds letter spacing after the last glyph too, so subtract it to get the visible width
+        const measure = (t: string) => ctx.measureText(t).width - spacing
+        const lines = balanceLines(s.text, (canvas.width * s.textMaxWidth) / 100, measure)
+        const lineGap = s.fontSize * scale * s.lineHeight
+
+        // Center the visible ink of the whole block, not the em boxes
+        const first = ctx.measureText(lines[0])
+        const last = ctx.measureText(lines[lines.length - 1])
+        const inkTop = -first.actualBoundingBoxAscent
+        const inkBottom = (lines.length - 1) * lineGap + last.actualBoundingBoxDescent
         const x = canvas.width / 2 + s.textOffsetX * scale + spacing / 2
-        const y =
-            canvas.height / 2 +
-            s.textOffsetY * scale +
-            (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2
-        ctx.fillText(s.text, x, y)
+        const y0 = canvas.height / 2 + s.textOffsetY * scale - (inkTop + inkBottom) / 2
+        lines.forEach((line, i) => ctx.fillText(line, x, y0 + i * lineGap))
         ctx.restore()
     }
+}
+
+/** Greedy word wrap at `maxWidth`. A single word wider than that gets a line of its own. */
+function wrapLines(words: string[], maxWidth: number, measure: (t: string) => number) {
+    const lines: string[] = []
+    let line = ""
+    for (const word of words) {
+        const next = line ? `${line} ${word}` : word
+        if (line && measure(next) > maxWidth) {
+            lines.push(line)
+            line = word
+        } else line = next
+    }
+    if (line) lines.push(line)
+    return lines
+}
+
+/**
+ * Like CSS `text-wrap: balance`: keep the line count greedy wrapping needs, but find the
+ * narrowest width that still fits it, so the lines come out about equally long.
+ */
+function balanceLines(text: string, maxWidth: number, measure: (t: string) => number) {
+    const words = text.trim().split(/\s+/)
+    const target = wrapLines(words, maxWidth, measure).length
+    if (target <= 1) return [words.join(" ")]
+    let lo = Math.max(...words.map(measure))
+    let hi = maxWidth
+    if (lo >= hi) return wrapLines(words, maxWidth, measure)
+    for (let i = 0; i < 14; i++) {
+        const mid = (lo + hi) / 2
+        if (wrapLines(words, mid, measure).length <= target) hi = mid
+        else lo = mid
+    }
+    return wrapLines(words, hi, measure)
 }
