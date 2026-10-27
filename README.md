@@ -2,9 +2,9 @@
 
 A small browser tool for making the `og:video` for my portfolio: a twinkling 3D particle globe with a line of text over it, tweakable live and exported as an MP4.
 
-[![The exported OG video: a slowly turning particle globe behind "Deep Patel"](assets/deep-patel-og.gif)](assets/deep-patel-og.mp4)
+[![The exported OG video: a slowly turning particle field behind "product designer with a developer's mind"](assets/product-designer-with-a-developer-s-mind-og.gif)](assets/product-designer-with-a-developer-s-mind-og.mp4)
 
-<sub>GIF preview, since GitHub won't play a repo MP4 inline. Click it for the full-quality [MP4](assets/deep-patel-og.mp4).</sub>
+<sub>GIF preview, since GitHub won't play a repo MP4 inline. Click it for the full-quality [MP4](assets/product-designer-with-a-developer-s-mind-og.mp4).</sub>
 
 ## Run it
 
@@ -73,8 +73,9 @@ src/
     controls.tsx              slider, color, toggle, segmented and text inputs
   App.tsx                     preview stage, toolbar, wiring settings to the engine
 assets/
-  deep-patel-og.mp4           the exported video
-  deep-patel-og.gif           README preview of the video (800px, 20 fps)
+  product-designer-…-og.mp4   the current exported video (6 s seamless loop)
+  product-designer-…-og.gif   README preview of it (800px, 20 fps)
+  deep-patel-og.mp4/.gif      the earlier "Deep Patel" version
 ```
 
 To add a new setting, add it to `Settings`, `defaultSettings` and a section in `settings.ts`, then read it in `studio.ts`. The panel builds itself from that list.
