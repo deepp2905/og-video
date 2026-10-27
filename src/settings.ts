@@ -51,7 +51,7 @@ export const WIDTH = 1200
 export const HEIGHT = 630
 
 export const defaultSettings: Settings = {
-    backgroundColor: "#f4f3ef",
+    backgroundColor: "#ffffff",
 
     textVisible: true,
     text: "product designer with a developer's mind",
