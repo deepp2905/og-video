@@ -1,5 +1,5 @@
 // Every tweakable value, its default, and how the settings panel presents it.
-// Globe defaults mirror the Framer component's property-control defaults.
+// Defaults are the tuned look used for the portfolio video.
 
 export interface Settings {
     // Canvas
@@ -12,6 +12,8 @@ export interface Settings {
     fontSize: number
     letterSpacing: number // percent of font size
     fontWeight: number
+    textMaxWidth: number // percent of canvas width
+    lineHeight: number // multiple of font size
     textOffsetX: number
     textOffsetY: number
 
@@ -52,25 +54,27 @@ export const defaultSettings: Settings = {
     backgroundColor: "#f4f3ef",
 
     textVisible: true,
-    text: "Deep Patel",
+    text: "product designer with a developer's mind",
     textColor: "#111111",
-    fontSize: 240,
+    fontSize: 72,
     letterSpacing: -9,
-    fontWeight: 550,
+    fontWeight: 560,
+    textMaxWidth: 80,
+    lineHeight: 1.1,
     textOffsetX: 0,
     textOffsetY: 0,
 
     particleColor: "#333333",
-    particleCount: 500,
-    distribution: "surface",
-    sphereRadius: 2,
-    particleSize: 0.05,
+    particleCount: 250,
+    distribution: "everywhere",
+    sphereRadius: 4.5,
+    particleSize: 0.075,
     depthSizing: true,
-    maxSize: 3,
-    minSize: 0.1,
-    seed: 1,
+    maxSize: 2.5,
+    minSize: 0.5,
+    seed: 214,
 
-    loop: false,
+    loop: true,
     rotationSpeed: 0.1,
     floatIntensity: 0.5,
     twinkle: true,
@@ -138,6 +142,8 @@ export const sections: Section[] = [
             { key: "fontSize", type: "number", title: "Size", min: 12, max: 480, step: 1, unit: "px", hidden: noText },
             { key: "letterSpacing", type: "number", title: "Letter Spacing", min: -20, max: 20, step: 0.5, unit: "%", hidden: noText },
             { key: "fontWeight", type: "number", title: "Weight", min: 100, max: 900, step: 10, hidden: noText },
+            { key: "textMaxWidth", type: "number", title: "Max Width", min: 20, max: 100, step: 1, unit: "%", hidden: noText },
+            { key: "lineHeight", type: "number", title: "Line Height", min: 0.6, max: 2, step: 0.01, hidden: noText },
             { key: "textOffsetX", type: "number", title: "Offset X", min: -600, max: 600, step: 1, unit: "px", hidden: noText },
             { key: "textOffsetY", type: "number", title: "Offset Y", min: -315, max: 315, step: 1, unit: "px", hidden: noText },
         ],
